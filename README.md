@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/maticzav/elasticsearch-mappings.svg?branch=master)](https://travis-ci.org/maticzav/elasticsearch-mappings)
+
 # ElasticSearch - Mappings
 A simple `elasticsearch` helper CLI tool, written in nodejs.
 Use to upload index mappings to database in a simple way.
@@ -14,13 +15,15 @@ node main delete <index>
 ```
 
 __Options:__
-- ``[path]``: optional path to a mappings file or directory containing files.
+- ``[path]``: optional path to a mappings file or directory (current directory will be used by default).
 - ``[-h, --host]``: optional elasticsearch host parameter (default: localhost:9200)
 - ``[-f, --force]``: force recreation of indices.
 
 ## Files
 A file named `foo.json` inside `/mappings` folder will result in the creation
 of an index named foo and will have settings described in a file.
+
+> `NOTE`: elasticsearch-mappings by default doesn't look for `/mappings` directory!
 
 __elasticsearch-mappings support all settings options defined in elasticsearch reference.__
 
