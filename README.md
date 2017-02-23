@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/maticzav/elasticsearch-mappings.svg?branch=master)](https://travis-ci.org/maticzav/elasticsearch-mappings)
 # ElasticSearch - Mappings
 A simple `elasticsearch` helper CLI tool, written in nodejs.
 Use to upload index mappings to database in a simple way.
