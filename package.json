@@ -1,6 +1,6 @@
 {
   "name": "elasticsearch-mappings",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Easy to use elasticsearch schema/mappings uploader writen in nodejs.",
   "main": "main.js",
   "scripts": {

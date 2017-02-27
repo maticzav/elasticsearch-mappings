@@ -79,9 +79,8 @@ program
       async.each(mappings, (mapping, done) => {
         client.indices.create(mapping, (err, res) => {
           if (err) {
-            done(err)
-          }
-          if (!res.acknowledged || !res.shards_acknowledged) {
+            done(new Error(`${mapping.index} : ${err.message}`))
+          } else if (!res.acknowledged || !res.shards_acknowledged) {
             done(new Error(`${mapping.index} creation unsuccessful: ${res}`))
           } else {
             done(null)
@@ -90,8 +89,9 @@ program
       }, err => {
         if (err) {
           callback(err)
+        } else {
+          callback(null, mappings)
         }
-        callback(null, mappings)
       })
     }
 
@@ -104,14 +104,13 @@ program
       createIndices
     ], (err, res) => {
       if (err) {
-        spinner.fail(`:(`)
-        throw err
-      }
-      if (res.length === 0) {
+        spinner.fail(`Indices creation failed due to: \n ${err.message}.`)
+      } else if (res.length === 0) {
         spinner.succeed(`No indices created. Use -f (force) option to force index recreation.`)
       } else {
         spinner.succeed(`Successfully created ${res.length} ${res.length === 1 ? 'index' : 'indices'}! ${res.map(m => m.index)}`)
       }
+      spinner.stop()
     })
   })
 
