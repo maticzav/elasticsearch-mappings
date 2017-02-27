@@ -11,13 +11,16 @@ Use to upload index mappings to database in a simple way.
 
 ```
 elasticsearch-mappings create [path] [-h] [-f]
-elasticsearch-mappings delete <index>
+elasticsearch-mappings delete [index]
 ```
 
 __Options:__
+### Create:
 - ``[path]``: optional path to a mappings file or directory (current directory will be used by default).
 - ``[-h, --host]``: optional elasticsearch host parameter (default: localhost:9200)
 - ``[-f, --force]``: force recreation of indices.
+### Delete:
+- ``[index]``: optional index name (all indices will be delete by default).
 
 ## Files
 A file named `foo.json` inside `/mappings` folder will result in the creation
@@ -33,9 +36,12 @@ Reference: [mappings](https://www.elastic.co/guide/en/elasticsearch/reference/cu
 Running `elasticsearch-mappings create ./example` will create two indices, `bar` and `foo`.
 Running `elasticsearch-mappings create ./example/bar.json` will create only one index, `bar`.
 
+Running `elasticsearch-mappings delete bar` will delete only one index, `bar`.
+Running `elasticsearch-mappings delete` will delete all/both indexes, `bar` and `foo`.
+
 ## Contribution
 - Fork the repo.
 - Change the code.
 - Create a PR.
 
-__If you find a bug, open an issue or create a PR.__
+__If you find a bug, please open an issue or create a PR.__

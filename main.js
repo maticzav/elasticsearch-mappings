@@ -45,25 +45,54 @@ program
       async.parallel(tasks, callback)
     }
 
+    // ES part
     const dropExisitingOrForce = (mappings, callback) => {
       async.filter(mappings, (mapping, done) => {
-        client.indices.exists({index: mapping.index}, exists => {
-          if (exists && force) {
-            spinner.warn(`${mapping.index} is going to be delete.`)
+        client.indices.exists({index: mapping.index}, (err, exists) => {
+          if (err) {
+            done(err)
           }
-          done(null, !exists || force)
+          if (exists && force) {
+            // spinner.warn(`${mapping.index} is going to be delete.`)
+            client.indices.delete({index: mapping.index}, (err, res) => {
+              if (err) {
+                done(err)
+              }
+              if (res.acknowledged) {
+                done(null, true)
+              } else {
+                done(new Error(`${mapping.index} delete rejected: ${res}`))
+              }
+            })
+          } else if (exists && !force) {
+            // spinner.warn(`${mapping.index} already exists. Use -f (force option) to force recreate.`)
+            done(null, false)
+          } else {
+            done(null, true)
+          }
         })
       }, callback)
     }
 
     const createIndices = (mappings, callback) => {
       spinner.succeed('Gathered config files.')
-      async.map(mappings, (mapping, done) => {
-        client.indices.delete({index: mapping.index, ignore: [404]})
-        .then(
-          client.indices.create(mapping).then(() => done(null), err => done(err))
-        )
-      }, callback)
+      async.each(mappings, (mapping, done) => {
+        client.indices.create(mapping, (err, res) => {
+          if (err) {
+            done(err)
+          }
+          if (!res.acknowledged || !res.shards_acknowledged) {
+            done(new Error(`${mapping.index} creation unsuccessful: ${res}`))
+          } else {
+            done(null)
+          }
+        })
+      }, err => {
+        if (err) {
+          callback(err)
+        }
+        callback(null, mappings)
+      })
     }
 
     // Fire them off!
@@ -73,17 +102,22 @@ program
       loadFiles,
       dropExisitingOrForce,
       createIndices
-    ], err => {
+    ], (err, res) => {
       if (err) {
+        spinner.fail(`:(`)
         throw err
       }
-      spinner.succeed('Done.')
+      if (res.length === 0) {
+        spinner.succeed(`No indices created. Use -f (force) option to force index recreation.`)
+      } else {
+        spinner.succeed(`Successfully created ${res.length} ${res.length === 1 ? 'index' : 'indices'}! ${res.map(m => m.index)}`)
+      }
     })
   })
 
 program
   .version('1.0.0')
-  .command('delete <index>')
+  .command('delete [index]')
   .option('-h, --host [optional]', 'The host URL of ElasticSearch.', 'localhost:9200')
   .action((index, options) => {
     const {host} = options
@@ -95,11 +129,14 @@ program
       host: host
     })
 
-    client.indices.delete({index: index, ignore: [404]}).then(res => {
+    client.indices.delete({index: (index || '_all')}, (err, res) => {
+      if (err) {
+        spinner.fail(`Error occured. ${err}`)
+      }
       if (res.acknowledged) {
         spinner.succeed('Index delete!')
       } else {
-        spinner.fail('Deleting index failed.')
+        spinner.fail(`Deleting index failed. ${res}`)
       }
       spinner.stop()
     })
