@@ -19,7 +19,7 @@ program
   .option('-f, --force', 'Force the creation of index.')
   .option('-h, --host [optional]', 'The host URL of ElasticSearch.', 'localhost:9200')
   .action((dirpath, options) => {
-    const directory = dirpath ? (path.isAbsolute(dirpath) ? dirpath : path.resolve(__dirname, dirpath)) : __dirname
+    const directory = dirpath ? (path.isAbsolute(dirpath) ? dirpath : path.resolve(process.cwd(), dirpath)) : process.cwd()
     const {host, force} = options
 
     // SPINNER
