@@ -10,8 +10,8 @@ Use to upload index mappings to database in a simple way.
 3. Everything else happens automatically.
 
 ```
-node main create [path] [-h] [-f]
-node main delete <index>
+elasticsearch-mappings create [path] [-h] [-f]
+elasticsearch-mappings delete <index>
 ```
 
 __Options:__
@@ -30,8 +30,8 @@ __elasticsearch-mappings support all settings options defined in elasticsearch r
 Reference: [mappings](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html)
 
 ## Example
-Running `node main create ./example` will create two indices, `bar` and `foo`.
-Running `node main create ./example/bar.json` will create only one index, `bar`.
+Running `elasticsearch-mappings create ./example` will create two indices, `bar` and `foo`.
+Running `elasticsearch-mappings create ./example/bar.json` will create only one index, `bar`.
 
 ## Contribution
 - Fork the repo.

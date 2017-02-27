@@ -1,6 +1,6 @@
 {
   "name": "elasticsearch-mappings",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy to use elasticsearch mappings uploader in nodejs.",
   "main": "main.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "repository": "https://github.com/maticzav/elasticsearch-mappings",
   "author": "Matic Zavadlal <matic.zavadlal@gmail.com>",
   "license": "MIT",
+  "bin": "main.js",
   "xo": {
     "space": true,
     "semicolon": false,
