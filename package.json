@@ -1,7 +1,7 @@
 {
   "name": "elasticsearch-mappings",
-  "version": "1.0.2",
-  "description": "Easy to use elasticsearch mappings uploader in nodejs.",
+  "version": "1.0.3",
+  "description": "Easy to use elasticsearch schema/mappings uploader writen in nodejs.",
   "main": "main.js",
   "scripts": {
     "test": "ava && xo"
@@ -29,5 +29,17 @@
     "eslint-config-xo": "^0.17.0",
     "eslint-plugin-xo": "^1.0.0",
     "xo": "^0.17.1"
-  }
+  },
+  "keywords": [
+    "elastic",
+    "elasticsearch",
+    "elastic-search",
+    "mappings",
+    "elasticsearch-mappings",
+    "schema",
+    "elasticsearch-schema",
+    "es",
+    "es-mappings",
+    "es-schema"
+  ]
 }
